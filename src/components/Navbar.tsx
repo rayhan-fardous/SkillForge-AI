@@ -30,7 +30,7 @@ import {
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { isLoggedIn, user, toggleAuth, logout } = useAuth();
+  const { isLoggedIn, user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -104,17 +104,6 @@ export const Navbar: React.FC = () => {
 
         {/* Right Section Buttons */}
         <div className="hidden lg:flex items-center gap-3">
-          {/* Dev Auth State Switcher */}
-          <button
-            onClick={toggleAuth}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border transition-all duration-300 cursor-pointer bg-neutral-900/80 hover:bg-neutral-800/80 border-neutral-800"
-            title="Click to toggle between Guest and Authenticated views"
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${isLoggedIn ? "bg-emerald-500 animate-ping" : "bg-neutral-600"}`} />
-            <span className={isLoggedIn ? "text-emerald-400" : "text-neutral-400"}>
-              Mock Auth: {isLoggedIn ? "On" : "Off"}
-            </span>
-          </button>
 
           {isLoggedIn && user ? (
             <div className="relative">
@@ -199,14 +188,6 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Hamburger Button */}
         <div className="flex items-center gap-2 lg:hidden">
-          {/* Quick Mock Auth Switcher for Mobile */}
-          <button
-            onClick={toggleAuth}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold border transition-all duration-300 bg-neutral-900 border-neutral-800"
-          >
-            <span className={`h-1 w-1 rounded-full ${isLoggedIn ? "bg-emerald-500 animate-ping" : "bg-neutral-600"}`} />
-            <span className={isLoggedIn ? "text-emerald-400" : "text-neutral-400"}>Auth</span>
-          </button>
           
           <button
             onClick={() => setIsOpen(!isOpen)}

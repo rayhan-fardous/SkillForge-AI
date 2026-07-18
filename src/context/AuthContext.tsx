@@ -1,6 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext } from "react";
+import { useSession, signOut } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 interface User {
   name: string;
@@ -11,60 +13,40 @@ interface User {
 
 interface AuthContextType {
   isLoggedIn: boolean;
+  isPending: boolean;
   user: User | null;
-  login: () => void;
-  logout: () => void;
-  toggleAuth: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
 
-  // Initialize status from localStorage if available (client side)
-  useEffect(() => {
-    const savedStatus = localStorage.getItem("skillforge_logged_in");
-    if (savedStatus === "true") {
-      setIsLoggedIn(true);
-      setUser({
-        name: "Rayhan Fardous",
-        email: "rayhan.fardous@skillforge.ai",
-        role: "Aspiring AI Engineer",
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80",
-      });
-    }
-  }, []);
+  const isLoggedIn = !!session;
 
-  const login = () => {
-    setIsLoggedIn(true);
-    const mockUser = {
-      name: "Alex Mercer",
-      email: "rayhan.fardous@skillforge.ai",
-      role: "Aspiring AI Engineer",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80",
-    };
-    setUser(mockUser);
-    localStorage.setItem("skillforge_logged_in", "true");
-  };
+  const user: User | null = session?.user
+    ? {
+        name: session.user.name,
+        email: session.user.email,
+        role: (session.user as any).role || "student",
+        avatar: session.user.image || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80",
+      }
+    : null;
 
-  const logout = () => {
-    setIsLoggedIn(false);
-    setUser(null);
-    localStorage.setItem("skillforge_logged_in", "false");
-  };
-
-  const toggleAuth = () => {
-    if (isLoggedIn) {
-      logout();
-    } else {
-      login();
-    }
+  const logout = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      },
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout, toggleAuth }}>
+    <AuthContext.Provider value={{ isLoggedIn, isPending, user, logout }}>
       {children}
     </AuthContext.Provider>
   );
