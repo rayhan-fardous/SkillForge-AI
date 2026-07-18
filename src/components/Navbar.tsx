@@ -45,11 +45,11 @@ export const Navbar: React.FC = () => {
 
   const protectedLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Roadmaps", href: "/roadmaps", icon: Compass },
     { name: "Learning Goals", href: "/learning-goals", icon: BookOpen },
     { name: "Manage Goals", href: "/items/manage", icon: FolderKanban },
     { name: "AI Mentor", href: "/ai-mentor", icon: MessageSquare },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   const activeLinks = isLoggedIn ? protectedLinks : publicLinks;

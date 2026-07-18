@@ -13,15 +13,29 @@ export default function AddGoalPage() {
   const [dueDate, setDueDate] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title) return;
 
-    setIsSuccess(true);
-    setTimeout(() => {
-      setIsSuccess(false);
-      router.push("/learning-goals");
-    }, 1500);
+    try {
+      const response = await fetch("/api/goals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, source, dueDate }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create goal");
+      }
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        router.push("/learning-goals");
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

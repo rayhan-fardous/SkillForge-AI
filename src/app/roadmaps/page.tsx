@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Compass, Clock, Award, Star, Search, ShieldAlert, ArrowRight, X } from "lucide-react";
 
@@ -24,128 +24,25 @@ export default function ExplorePage() {
   const ratings = ["All", "4.5 Stars+", "4.8 Stars+"];
   const sortOptions = ["Most Popular", "Highest Rated", "Highest Salary", "Newest"];
 
-  const allCareers = [
-    {
-      id: "frontend-developer",
-      title: "Frontend Developer",
-      category: "Software Engineering",
-      difficulty: "Medium",
-      duration: "4 Months",
-      durationVal: 4,
-      salary: "$115,000",
-      salaryVal: 115000,
-      rating: 4.8,
-      popularity: 1500,
-      created: "2026-05-10",
-      image: "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
-      desc: "Create responsive client-side visual interfaces, manage application states, and optimize asset distribution pipelines.",
-    },
-    {
-      id: "ai-engineer",
-      title: "AI Engineer",
-      category: "AI & Data Science",
-      difficulty: "Hard",
-      duration: "6 Months",
-      durationVal: 6,
-      salary: "$145,000",
-      salaryVal: 145000,
-      rating: 4.9,
-      popularity: 2500,
-      created: "2026-07-01",
-      image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=600&q=80",
-      desc: "Integrate vector databases, establish context-aware retrieval chains (RAG), and fine-tune transformer models.",
-    },
-    {
-      id: "backend-developer",
-      title: "Backend Developer",
-      category: "Software Engineering",
-      difficulty: "Medium",
-      duration: "5 Months",
-      durationVal: 5,
-      salary: "$120,000",
-      salaryVal: 120000,
-      rating: 4.7,
-      popularity: 1800,
-      created: "2026-04-12",
-      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
-      desc: "Architect RESTful services, construct relational caches, coordinate distributed message systems, and manage DBs.",
-    },
-    {
-      id: "devops-engineer",
-      title: "DevOps Engineer",
-      category: "Cloud & Operations",
-      difficulty: "Hard",
-      duration: "9 Months",
-      durationVal: 9,
-      salary: "$135,000",
-      salaryVal: 135000,
-      rating: 4.8,
-      popularity: 1200,
-      created: "2026-06-15",
-      image: "https://images.unsplash.com/photo-1618401471353-b98aedd07871?auto=format&fit=crop&w=600&q=80",
-      desc: "Deploy container orchestrations (Kubernetes), configure CI/CD automations, and manage IaC configuration matrices.",
-    },
-    {
-      id: "data-scientist",
-      title: "Data Scientist",
-      category: "AI & Data Science",
-      difficulty: "Medium",
-      duration: "6 Months",
-      durationVal: 6,
-      salary: "$130,000",
-      salaryVal: 130000,
-      rating: 4.6,
-      popularity: 900,
-      created: "2026-01-20",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
-      desc: "Train classical machine learning models, scrub raw data metrics, and formulate statistical predictive reports.",
-    },
-    {
-      id: "cyber-security-engineer",
-      title: "Cyber Security Engineer",
-      category: "Cybersecurity",
-      difficulty: "Hard",
-      duration: "7 Months",
-      durationVal: 7,
-      salary: "$125,000",
-      salaryVal: 125000,
-      rating: 4.8,
-      popularity: 1100,
-      created: "2026-03-05",
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80",
-      desc: "Perform network vulnerability scans, mitigate active XSS exploits, and audit server endpoints permissions.",
-    },
-    {
-      id: "cloud-security-specialist",
-      title: "Cloud Security Specialist",
-      category: "Cybersecurity",
-      difficulty: "Hard",
-      duration: "8 Months",
-      durationVal: 8,
-      salary: "$140,000",
-      salaryVal: 140000,
-      rating: 4.7,
-      popularity: 700,
-      created: "2026-06-25",
-      image: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=600&q=80",
-      desc: "Enforce cloud identity barriers, configure network firewalls, and verify Kubernetes cluster access limits.",
-    },
-    {
-      id: "full-stack-developer",
-      title: "Full Stack Developer",
-      category: "Software Engineering",
-      difficulty: "Easy",
-      duration: "3 Months",
-      durationVal: 3,
-      salary: "$95,000",
-      salaryVal: 95000,
-      rating: 4.5,
-      popularity: 600,
-      created: "2026-07-10",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
-      desc: "Build end-to-end full stack web platforms, integrate databases, and configure public hosting endpoints.",
-    },
-  ];
+  const [allCareers, setAllCareers] = useState<any[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState(true);
+  const [catalogError, setCatalogError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/roadmaps/catalog")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load catalog");
+        return res.json();
+      })
+      .then((data) => {
+        setAllCareers(Array.isArray(data) ? data : []);
+        setCatalogLoading(false);
+      })
+      .catch((err) => {
+        setCatalogError(err.message);
+        setCatalogLoading(false);
+      });
+  }, []);
 
   // Filtering + Sorting computations
   const processedCareers = useMemo(() => {
@@ -213,7 +110,7 @@ export default function ExplorePage() {
     }
 
     return result;
-  }, [searchQuery, categoryFilter, diffFilter, durationFilter, salaryFilter, ratingFilter, sortOption]);
+  }, [allCareers, searchQuery, categoryFilter, diffFilter, durationFilter, salaryFilter, ratingFilter, sortOption]);
 
   // Page index slice
   const paginatedCareers = useMemo(() => {
@@ -250,6 +147,30 @@ export default function ExplorePage() {
           <p className="text-sm text-neutral-400">
             Search, filter, and sort among popular engineering roadmaps designed dynamically to align with actual job requirements.
           </p>
+        </div>
+
+        {/* AI Personalized Banner Card */}
+        <div className="relative rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 sm:p-8 overflow-hidden backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_0_20px_rgba(99,102,241,0.08)]">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none -ml-20 -mb-20" />
+          
+          <div className="space-y-2 text-center md:text-left relative">
+            <span className="inline-flex items-center gap-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-2.5 py-0.5 text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+              ✨ Dynamic Curriculum
+            </span>
+            <h2 className="text-xl font-bold text-white tracking-tight">Need a custom curriculum?</h2>
+            <p className="text-xs text-neutral-400 max-w-xl leading-relaxed">
+              Our AI agent can synthesize personalized roadmaps, project checkpoints, and learning resources custom tailored to your exact career goals and schedule.
+            </p>
+          </div>
+          
+          <Link
+            href="/roadmaps/generate"
+            className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all duration-300 cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 w-full md:w-auto justify-center"
+          >
+            Generate AI Roadmap
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
         {/* Explore Panel Structure */}
@@ -371,7 +292,13 @@ export default function ExplorePage() {
             </div>
 
             {/* Catalog Grid */}
-            {paginatedCareers.length > 0 ? (
+            {catalogLoading ? (
+              <div className="flex justify-center py-24">
+                <div className="h-7 w-7 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+              </div>
+            ) : catalogError ? (
+              <div className="text-center py-16 text-xs text-red-400">{catalogError}</div>
+            ) : paginatedCareers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {paginatedCareers.map((c) => (
                   <div

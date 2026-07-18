@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillForge AI - AI-Powered Career & Learning Roadmap Platform",
+  title: "SkillForge AI",
   description: "Accelerate your career with AI-generated roadmaps, hands-on projects, and real-time mentor feedback.",
 };
 

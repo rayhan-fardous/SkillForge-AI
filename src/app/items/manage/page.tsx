@@ -1,23 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { FolderKanban, ArrowLeft, Trash2, CheckSquare, Square, CheckCircle } from "lucide-react";
+import { FolderKanban, ArrowLeft, Trash2, CheckSquare, Square } from "lucide-react";
 
 export default function ManageGoalsPage() {
-  const [goals, setGoals] = useState([
-    { id: 1, title: "Master Kubernetes Scaling and Pod Architectures", completed: false },
-    { id: 2, title: "Integrate Vector Store Indexing with Pinecone", completed: false },
-    { id: 3, title: "Write Multi-stage Docker Builds for Web Apps", completed: true },
-  ]);
+  const [goals, setGoals] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const toggleComplete = (id: number) => {
-    setGoals(goals.map(g => g.id === id ? { ...g, completed: !g.completed } : g));
+  useEffect(() => {
+    fetchGoals();
+  }, []);
+
+  const fetchGoals = () => {
+    fetch("/api/goals")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setGoals(data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
-  const deleteGoal = (id: number) => {
-    setGoals(goals.filter(g => g.id !== id));
+  const toggleComplete = async (id: string, currentCompleted: boolean) => {
+    try {
+      const res = await fetch("/api/goals", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, completed: !currentCompleted }),
+      });
+      if (res.ok) {
+        setGoals(
+          goals.map((g) =>
+            g.id === id ? { ...g, completed: !g.completed } : g
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteGoal = async (id: string) => {
+    try {
+      const res = await fetch("/api/goals", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        setGoals(goals.filter((g) => g.id !== id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -47,7 +89,11 @@ export default function ManageGoalsPage() {
 
           {/* Goals List Card */}
           <div className="rounded-xl border border-neutral-900 bg-neutral-900/40 p-6 space-y-4">
-            {goals.length > 0 ? (
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="h-6 w-6 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+              </div>
+            ) : goals.length > 0 ? (
               <div className="space-y-3">
                 {goals.map((g) => (
                   <div
@@ -56,7 +102,7 @@ export default function ManageGoalsPage() {
                   >
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => toggleComplete(g.id)}
+                        onClick={() => toggleComplete(g.id, g.completed)}
                         className="text-neutral-500 hover:text-indigo-400 transition-colors cursor-pointer"
                       >
                         {g.completed ? (

@@ -7,10 +7,10 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URL!);
+export const mongoClient = new MongoClient(process.env.MONGODB_URL!);
 
 export const auth = betterAuth({
-  database: mongodbAdapter(client.db("SkillForge-AI")),
+  database: mongodbAdapter(mongoClient.db("SkillForge-AI")),
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

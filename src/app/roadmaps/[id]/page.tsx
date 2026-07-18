@@ -1,7 +1,8 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import {
   Compass,
   Clock,
@@ -246,16 +247,93 @@ const detailsDatabase: Record<string, any> = {
   },
 };
 
-interface DetailsPageProps {
-  params: Promise<{ id: string }>;
-}
-
-export default function DetailsPage({ params }: DetailsPageProps) {
+export default function DetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const id = resolvedParams.id;
+  const { isLoggedIn } = useAuth();
 
-  // Fallback to frontend-developer details if key is missing
-  const data = detailsDatabase[id] || detailsDatabase["frontend-developer"];
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [enrollSuccess, setEnrollSuccess] = useState("");
+  const [addedGoals, setAddedGoals] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (detailsDatabase[id]) {
+      setData(detailsDatabase[id]);
+      setLoading(false);
+    } else {
+      // Fetch custom AI roadmap from MongoDB
+      fetch(`/api/roadmaps/${id}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to load");
+          return res.json();
+        })
+        .then((resData) => {
+          setData(resData);
+          setLoading(false);
+        })
+        .catch(() => {
+          setData(detailsDatabase["frontend-developer"]); // Fallback
+          setLoading(false);
+        });
+    }
+  }, [id]);
+
+  const addGoal = async (title: string) => {
+    try {
+      const res = await fetch("/api/goals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          source: data.title,
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        }),
+      });
+      if (res.ok) {
+        setAddedGoals((prev) => ({ ...prev, [title]: true }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const enrollInPath = async () => {
+    if (!data) return;
+    setEnrollSuccess("Enrolling...");
+    try {
+      for (const node of data.roadmap) {
+        if (!addedGoals[node.title]) {
+          await fetch("/api/goals", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: node.title,
+              source: data.title,
+              dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+            }),
+          });
+          setAddedGoals((prev) => ({ ...prev, [node.title]: true }));
+        }
+      }
+      setEnrollSuccess("Successfully enrolled in all milestones!");
+      setTimeout(() => setEnrollSuccess(""), 3000);
+    } catch {
+      setEnrollSuccess("Failed to enroll in all milestones.");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[60vh] bg-neutral-950">
+        <div className="h-6 w-6 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/10 via-neutral-950 to-neutral-950">
@@ -289,13 +367,28 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             </h1>
           </div>
 
-          <Link
-            href="/register"
-            className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/20"
-          >
-            Enroll in Path
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          {isLoggedIn ? (
+            <div className="flex flex-col items-end gap-1.5 w-full md:w-auto">
+              <button
+                onClick={enrollInPath}
+                className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/20"
+              >
+                Enroll in Path
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+              {enrollSuccess && (
+                <span className="text-[10px] text-indigo-400 font-semibold">{enrollSuccess}</span>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/register"
+              className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/20"
+            >
+              Enroll in Path
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          )}
         </div>
 
         {/* 1. OVERVIEW */}
@@ -319,7 +412,7 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
               <h3 className="font-semibold text-neutral-200">Beginner Foundations</h3>
               <div className="flex flex-wrap gap-1.5">
-                {data.skills.beginner.map((s: string, idx: number) => (
+                {(data.skills?.beginner || []).map((s: string, idx: number) => (
                   <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-neutral-400">
                     {s}
                   </span>
@@ -330,7 +423,7 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
               <h3 className="font-semibold text-neutral-200">Intermediate Core</h3>
               <div className="flex flex-wrap gap-1.5">
-                {data.skills.intermediate.map((s: string, idx: number) => (
+                {(data.skills?.intermediate || []).map((s: string, idx: number) => (
                   <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-indigo-400">
                     {s}
                   </span>
@@ -341,7 +434,7 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
               <h3 className="font-semibold text-neutral-200">Advanced Systems</h3>
               <div className="flex flex-wrap gap-1.5">
-                {data.skills.advanced.map((s: string, idx: number) => (
+                {(data.skills?.advanced || []).map((s: string, idx: number) => (
                   <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-cyan-400">
                     {s}
                   </span>
@@ -358,46 +451,67 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             Career Roadmap Milestones
           </h2>
           <div className="border-l border-neutral-850 ml-4 space-y-6 text-xs">
-            {data.roadmap.map((node: any) => (
+            {(data.roadmap || []).map((node: any) => (
               <div key={node.step} className="relative pl-6">
                 <div className="absolute -left-2.5 top-1 h-5 w-5 rounded-full bg-neutral-950 border border-neutral-800 text-indigo-400 flex items-center justify-center text-[10px] font-bold">
                   {node.step}
                 </div>
-                <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-xl space-y-1">
-                  <h4 className="font-semibold text-neutral-200">{node.title}</h4>
-                  <p className="text-neutral-500 leading-relaxed">{node.desc}</p>
+                <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-xl space-y-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-neutral-200">{node.title}</h4>
+                    <p className="text-neutral-500 leading-relaxed">{node.desc}</p>
+                  </div>
+                  {isLoggedIn && (
+                    <button
+                      onClick={() => addGoal(node.title)}
+                      disabled={addedGoals[node.title]}
+                      className={`flex-shrink-0 flex items-center justify-center h-8 px-2.5 rounded-lg border text-[10px] font-bold transition-all cursor-pointer ${
+                        addedGoals[node.title]
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                          : "bg-neutral-900 border-neutral-850 hover:border-neutral-750 text-neutral-350 hover:text-white"
+                      }`}
+                    >
+                      {addedGoals[node.title] ? (
+                        <span className="flex items-center gap-1">✓ Added</span>
+                      ) : (
+                        <span className="flex items-center gap-1">+ Add Goal</span>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* 4. AVERAGE SALARY METRICS */}
-        <section className="space-y-3">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <DollarSign className="h-4 w-4 text-indigo-400" />
-            Average Salary Scale
-          </h2>
-          <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-5 space-y-4 text-xs">
-            <div className="grid grid-cols-3 gap-4 border-b border-neutral-900 pb-3">
-              <div>
-                <p className="text-[10px] text-neutral-500 uppercase font-semibold">Entry Level</p>
-                <p className="text-sm font-bold text-white mt-0.5">{data.salaryEntry}</p>
+        {/* 4. AVERAGE SALARY METRICS — only for static roadmaps that have salary data */}
+        {data.salaryEntry && (
+          <section className="space-y-3">
+            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
+              <DollarSign className="h-4 w-4 text-indigo-400" />
+              Average Salary Scale
+            </h2>
+            <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-5 space-y-4 text-xs">
+              <div className="grid grid-cols-3 gap-4 border-b border-neutral-900 pb-3">
+                <div>
+                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Entry Level</p>
+                  <p className="text-sm font-bold text-white mt-0.5">{data.salaryEntry}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Mid Trajectory</p>
+                  <p className="text-sm font-bold text-cyan-400 mt-0.5">{data.salaryMid}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Senior Target</p>
+                  <p className="text-sm font-bold text-emerald-400 mt-0.5">{data.salarySenior}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-[10px] text-neutral-500 uppercase font-semibold">Mid Trajectory</p>
-                <p className="text-sm font-bold text-cyan-400 mt-0.5">{data.salaryMid}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-neutral-500 uppercase font-semibold">Senior Target</p>
-                <p className="text-sm font-bold text-emerald-400 mt-0.5">{data.salarySenior}</p>
-              </div>
+              <p className="text-[10px] text-neutral-500">
+                *Averages compiled from local startup indexes and global tech telemetry.
+              </p>
             </div>
-            <p className="text-[10px] text-neutral-500">
-              *Averages compiled from local startup indexes and global tech telemetry.
-            </p>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* 5. LEARNING RESOURCES CHECKLIST */}
         <section className="space-y-3">
@@ -406,7 +520,7 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             Learning Resources Checkpoints
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            {data.resources.map((res: any, idx: number) => (
+            {(data.resources || []).map((res: any, idx: number) => (
               <div
                 key={idx}
                 className="flex items-center gap-3 p-3 bg-neutral-905 border border-neutral-900 rounded-xl"
@@ -421,45 +535,49 @@ export default function DetailsPage({ params }: DetailsPageProps) {
           </div>
         </section>
 
-        {/* 6. STUDENT REVIEWS */}
-        <section className="space-y-4">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <Star className="h-4 w-4 text-indigo-400" />
-            Student Reviews
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-            {data.reviews.map((rev: any, idx: number) => (
-              <div key={idx} className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-neutral-300">{rev.name}</span>
-                  <div className="flex gap-0.5 text-indigo-400">
-                    {Array.from({ length: rev.rating }, (_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                    ))}
+        {/* 6. STUDENT REVIEWS — only for static roadmaps */}
+        {data.reviews?.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
+              <Star className="h-4 w-4 text-indigo-400" />
+              Student Reviews
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+              {(data.reviews || []).map((rev: any, idx: number) => (
+                <div key={idx} className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-neutral-300">{rev.name}</span>
+                    <div className="flex gap-0.5 text-indigo-400">
+                      {Array.from({ length: rev.rating }, (_, i) => (
+                        <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                      ))}
+                    </div>
                   </div>
+                  <p className="text-neutral-500 italic leading-relaxed">&quot;{rev.comment}&quot;</p>
                 </div>
-                <p className="text-neutral-500 italic leading-relaxed">&quot;{rev.comment}&quot;</p>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* 7. RELATED CAREER PATHS RECOMMENDATION */}
-        <section className="space-y-3">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Related Career Paths</h2>
-          <div className="flex flex-wrap gap-2 text-xs">
-            {data.related.map((rel: any) => (
-              <Link
-                key={rel.id}
-                href={`/roadmaps/${rel.id}`}
-                className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-850 hover:border-neutral-700 text-neutral-300 hover:text-white px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
-              >
-                <span>{rel.title}</span>
-                <ChevronRight className="h-3 w-3 text-neutral-500" />
-              </Link>
-            ))}
-          </div>
-        </section>
+        {/* 7. RELATED CAREER PATHS — only for static roadmaps */}
+        {data.related?.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Related Career Paths</h2>
+            <div className="flex flex-wrap gap-2 text-xs">
+              {(data.related || []).map((rel: any) => (
+                <Link
+                  key={rel.id}
+                  href={`/roadmaps/${rel.id}`}
+                  className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-850 hover:border-neutral-700 text-neutral-300 hover:text-white px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  <span>{rel.title}</span>
+                  <ChevronRight className="h-3 w-3 text-neutral-500" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* 8. RECOMMENDED PROJECTS */}
         <section className="space-y-4">
@@ -468,7 +586,7 @@ export default function DetailsPage({ params }: DetailsPageProps) {
             Recommended Projects Checkpoints
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            {data.projects.map((proj: any, idx: number) => (
+            {(data.projects || []).map((proj: any, idx: number) => (
               <div
                 key={idx}
                 className="rounded-xl border border-neutral-900 bg-neutral-900/30 p-4 flex flex-col justify-between hover:border-neutral-800 transition-colors"
