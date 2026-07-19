@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Sparkles, MessageSquare, Mail } from "lucide-react";
+import { MessageSquare, Mail } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -14,10 +14,12 @@ export const Footer: React.FC = () => {
           
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                <Sparkles className="h-4 w-4 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-2 group">
+              <img
+                src="/logo.png"
+                alt="SkillForge Logo"
+                className="h-8 w-8 object-contain transition-transform duration-300 group-hover:scale-105"
+              />
               <span className="text-white font-bold tracking-tight text-md">
                 SkillForge<span className="text-cyan-400">.AI</span>
               </span>
@@ -68,7 +70,6 @@ export const Footer: React.FC = () => {
               <li><Link href="/learning-goals" className="hover:text-white transition-colors">Learning Goals</Link></li>
               <li><Link href="/ai-mentor" className="hover:text-white transition-colors">AI Mentor</Link></li>
               <li><Link href="/analytics" className="hover:text-white transition-colors">AI Analytics</Link></li>
-              <li><Link href="/settings" className="hover:text-white transition-colors">Settings</Link></li>
             </ul>
           </div>
 

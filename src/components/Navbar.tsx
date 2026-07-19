@@ -21,7 +21,6 @@ import {
   FolderKanban,
   MessageSquare,
   BarChart3,
-  Settings,
   LogIn,
   UserPlus,
   LogOut,
@@ -65,9 +64,11 @@ export const Navbar: React.FC = () => {
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 shadow-[0_0_15px_rgba(99,102,241,0.3)] group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all duration-300">
-            <Sparkles className="h-5 w-5 text-white animate-pulse" />
-          </div>
+          <img
+            src="/logo.png"
+            alt="SkillForge Logo"
+            className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105"
+          />
           <span className="bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-lg font-bold tracking-tight text-transparent">
             SkillForge<span className="text-cyan-400">.AI</span>
           </span>
@@ -143,14 +144,7 @@ export const Navbar: React.FC = () => {
                         <User className="h-3.5 w-3.5" />
                         My Profile
                       </Link>
-                      <Link
-                        href="/settings"
-                        className="flex items-center gap-2 px-3 py-2 text-xs text-neutral-400 hover:text-neutral-200 rounded-lg hover:bg-neutral-900 transition-colors"
-                        onClick={() => setShowProfileMenu(false)}
-                      >
-                        <Settings className="h-3.5 w-3.5" />
-                        Settings
-                      </Link>
+                      
                       <button
                         onClick={() => {
                           logout();
