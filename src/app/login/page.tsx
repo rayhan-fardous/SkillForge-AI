@@ -80,31 +80,30 @@ export default function LoginPage() {
   };
 
   const inputClass = (hasError: boolean) =>
-    `w-full bg-neutral-950 border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none transition-colors ${
+    `w-full input-glass text-xs text-white focus:outline-none transition-all duration-300 ${
       hasError
-        ? "border-red-500/60 focus:border-red-500"
-        : "border-neutral-800 focus:border-indigo-500/60"
+        ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_12px_rgba(239,68,68,0.2)]"
+        : "focus:input-glass-focus"
     }`;
 
   return (
-    <div className="flex-1 flex items-center justify-center p-6 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/15 via-neutral-950 to-neutral-950">
+    <div className="flex-1 flex items-center justify-center p-6 bg-transparent relative overflow-hidden">
+      {/* Decorative ambient glows behind container */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-sm"
+        className="w-full max-w-sm relative z-10"
       >
-        <div className="relative rounded-2xl border border-neutral-900 bg-neutral-900/50 p-8 backdrop-blur-md shadow-2xl overflow-hidden space-y-6">
-          {/* Glow decorations */}
-          <div className="absolute -top-16 -left-16 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-cyan-600/5 rounded-full blur-2xl pointer-events-none" />
-
+        <div className="relative rounded-3xl glass-card p-8 shadow-2xl overflow-hidden space-y-6">
           {/* Header */}
           <div className="text-center space-y-2 relative">
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600/30 to-cyan-600/20 text-indigo-400 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
-              <LogIn className="h-5 w-5" />
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,241,0.15)]">
+              <LogIn className="h-5 w-5 text-cyan-400" />
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">Welcome Back</h1>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-slate-400">
               Sign in to continue forging your career path.
             </p>
           </div>
@@ -114,7 +113,7 @@ export default function LoginPage() {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isGoogleLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white/[0.04] hover:bg-white/[0.07] border border-neutral-800 hover:border-neutral-700 text-neutral-200 font-semibold text-xs py-2.5 rounded-xl transition-all duration-200 cursor-pointer"
+            className="w-full flex items-center justify-center gap-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] text-slate-200 hover:text-white font-semibold text-xs py-2.5 rounded-xl transition-all duration-300 cursor-pointer shadow-lg hover:scale-[1.01]"
           >
             {isGoogleLoading ? (
               <div className="h-4 w-4 rounded-full border-2 border-neutral-500 border-t-white animate-spin" />
@@ -131,9 +130,9 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-neutral-900" />
-            <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wider">or sign in with email</span>
-            <div className="flex-1 h-px bg-neutral-900" />
+            <div className="flex-1 h-px bg-white/[0.06]" />
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">or sign in with email</span>
+            <div className="flex-1 h-px bg-white/[0.06]" />
           </div>
 
           {/* Server error alert */}
@@ -143,7 +142,7 @@ export default function LoginPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-3.5 py-2.5 rounded-lg"
+                className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-3.5 py-2.5 rounded-xl"
               >
                 <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
                 <span>{serverError}</span>
@@ -156,7 +155,7 @@ export default function LoginPage() {
             {/* Email */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="font-semibold text-neutral-300">Email Address</label>
+                <label className="font-semibold text-slate-350">Email Address</label>
               </div>
               <input
                 {...register("email")}
@@ -176,8 +175,8 @@ export default function LoginPage() {
             {/* Password */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="font-semibold text-neutral-300">Password</label>
-                <a href="#" className="text-[10px] text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                <label className="font-semibold text-slate-350">Password</label>
+                <a href="#" className="text-[10px] text-blue-400 hover:text-blue-300 font-medium transition-colors">
                   Forgot password?
                 </a>
               </div>
@@ -192,7 +191,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                 </button>
@@ -209,9 +208,9 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={handleAutofill}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-500/5 hover:bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500/40 text-indigo-400 hover:text-indigo-300 font-semibold text-[10px] py-2 rounded-lg transition-all duration-200 cursor-pointer uppercase tracking-wider"
+              className="w-full flex items-center justify-center gap-2 bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.12] text-slate-300 hover:text-white font-semibold text-[10px] py-2 rounded-xl transition-all duration-200 cursor-pointer uppercase tracking-wider"
             >
-              <Zap className="h-3 w-3" />
+              <Zap className="h-3 w-3 text-cyan-400" />
               Autofill Demo Credentials
             </button>
 
@@ -219,7 +218,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 disabled:from-neutral-800 disabled:to-neutral-800 disabled:text-neutral-500 text-white font-semibold text-xs py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
+              className="w-full btn-primary hover:btn-primary-hover disabled:bg-white/[0.02] disabled:text-slate-600 text-white font-semibold text-xs py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/10"
             >
               {isSubmitting ? (
                 <>
@@ -228,7 +227,7 @@ export default function LoginPage() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-3.5 w-3.5 text-cyan-200 animate-pulse" />
                   Sign In & Launch Dashboard
                 </>
               )}
@@ -236,9 +235,9 @@ export default function LoginPage() {
           </form>
 
           {/* Footer */}
-          <p className="text-center text-[10px] text-neutral-500">
+          <p className="text-center text-[10px] text-slate-500">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors">
+            <Link href="/register" className="text-blue-400 hover:text-blue-300 font-bold transition-colors">
               Create account
             </Link>
           </p>

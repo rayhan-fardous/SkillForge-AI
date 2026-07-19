@@ -132,41 +132,44 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/10 via-neutral-950 to-neutral-950">
-      <div className="mx-auto max-w-7xl space-y-10">
+    <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-transparent relative overflow-hidden">
+      {/* Decorative ambient glows */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="mx-auto max-w-7xl space-y-10 relative z-10">
         
         {/* Header */}
         <div className="text-center space-y-4 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 text-xs font-medium">
-            <Compass className="h-3.5 w-3.5 animate-spin-slow" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 text-xs font-medium shadow-[0_0_10px_rgba(6,182,212,0.1)] animate-pulse">
+            <Compass className="h-3.5 w-3.5" />
             Explore Career Roads
           </div>
           <h1 className="text-3xl font-extrabold text-white sm:text-4xl">
             Explore AI-Powered Portfolios
           </h1>
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-slate-400">
             Search, filter, and sort among popular engineering roadmaps designed dynamically to align with actual job requirements.
           </p>
         </div>
 
         {/* AI Personalized Banner Card */}
-        <div className="relative rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 sm:p-8 overflow-hidden backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_0_20px_rgba(99,102,241,0.08)]">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="relative rounded-3xl glass-card p-6 sm:p-8 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none -ml-20 -mb-20" />
           
           <div className="space-y-2 text-center md:text-left relative">
-            <span className="inline-flex items-center gap-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-2.5 py-0.5 text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 bg-blue-500/10 border border-blue-500/20 rounded-full px-2.5 py-0.5 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
               ✨ Dynamic Curriculum
             </span>
             <h2 className="text-xl font-bold text-white tracking-tight">Need a custom curriculum?</h2>
-            <p className="text-xs text-neutral-400 max-w-xl leading-relaxed">
+            <p className="text-xs text-slate-450 max-w-xl leading-relaxed">
               Our AI agent can synthesize personalized roadmaps, project checkpoints, and learning resources custom tailored to your exact career goals and schedule.
             </p>
           </div>
           
           <Link
             href="/roadmaps/generate"
-            className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all duration-300 cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 w-full md:w-auto justify-center"
+            className="flex-shrink-0 flex items-center gap-2 btn-primary hover:btn-primary-hover text-white font-bold text-xs px-6 py-3 rounded-xl transition-all duration-300 cursor-pointer shadow-lg w-full md:w-auto justify-center"
           >
             Generate AI Roadmap
             <ArrowRight className="h-4 w-4" />
@@ -177,12 +180,12 @@ export default function ExplorePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left panel: Filters Sidebar */}
-          <div className="lg:col-span-3 rounded-2xl border border-neutral-900 bg-neutral-900/30 p-5 space-y-5 backdrop-blur-sm">
-            <div className="flex justify-between items-center border-b border-neutral-900 pb-3">
+          <div className="lg:col-span-3 rounded-2xl glass-card p-5 space-y-5">
+            <div className="flex justify-between items-center border-b border-white/[0.06] pb-3">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">Filters</h3>
               <button
                 onClick={resetFilters}
-                className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold transition-colors cursor-pointer"
+                className="text-[10px] text-blue-405 hover:text-blue-300 font-bold transition-colors cursor-pointer"
               >
                 Reset All
               </button>
@@ -190,70 +193,70 @@ export default function ExplorePage() {
 
             {/* Category */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Category</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Category</label>
               <select
                 value={categoryFilter}
                 onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                className="w-full bg-neutral-950 border border-neutral-850 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               >
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat} className="bg-[#0B1120] text-white">{cat}</option>
                 ))}
               </select>
             </div>
 
             {/* Difficulty */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Difficulty</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Difficulty</label>
               <select
                 value={diffFilter}
                 onChange={(e) => { setDiffFilter(e.target.value); setCurrentPage(1); }}
-                className="w-full bg-neutral-950 border border-neutral-850 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               >
                 {difficulties.map((d) => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d} value={d} className="bg-[#0B1120] text-white">{d}</option>
                 ))}
               </select>
             </div>
 
             {/* Duration */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Duration</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Duration</label>
               <select
                 value={durationFilter}
                 onChange={(e) => { setDurationFilter(e.target.value); setCurrentPage(1); }}
-                className="w-full bg-neutral-950 border border-neutral-850 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               >
                 {durations.map((d) => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d} value={d} className="bg-[#0B1120] text-white">{d}</option>
                 ))}
               </select>
             </div>
 
             {/* Salary Range */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Salary Range</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Salary Range</label>
               <select
                 value={salaryFilter}
                 onChange={(e) => { setSalaryFilter(e.target.value); setCurrentPage(1); }}
-                className="w-full bg-neutral-950 border border-neutral-850 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               >
                 {salaries.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s} className="bg-[#0B1120] text-white">{s}</option>
                 ))}
               </select>
             </div>
 
             {/* Rating */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Min Rating</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Min Rating</label>
               <select
                 value={ratingFilter}
                 onChange={(e) => { setRatingFilter(e.target.value); setCurrentPage(1); }}
-                className="w-full bg-neutral-950 border border-neutral-850 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               >
                 {ratings.map((r) => (
-                  <option key={r} value={r}>{r}</option>
+                  <option key={r} value={r} className="bg-[#0B1120] text-white">{r}</option>
                 ))}
               </select>
             </div>
@@ -263,29 +266,29 @@ export default function ExplorePage() {
           <div className="lg:col-span-9 space-y-6">
             
             {/* Search + Sort Top header bar */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between border-b border-neutral-900 pb-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between border-b border-white/[0.06] pb-4">
               {/* Search input */}
               <div className="relative w-full sm:w-80">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-500" />
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                   placeholder="Search titles or technologies..."
-                  className="w-full bg-neutral-900 border border-neutral-800 rounded-lg pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                  className="w-full input-glass focus:input-glass-focus pl-9 pr-4 py-2"
                 />
               </div>
 
               {/* Sort selection */}
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end text-xs">
-                <span className="text-neutral-500 font-semibold uppercase text-[10px]">Sort:</span>
+                <span className="text-slate-500 font-semibold uppercase text-[10px]">Sort:</span>
                 <select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
-                  className="bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                  className="input-glass focus:input-glass-focus py-1.5 px-3"
                 >
                   {sortOptions.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s} className="bg-[#0B1120] text-white">{s}</option>
                   ))}
                 </select>
               </div>
@@ -294,16 +297,16 @@ export default function ExplorePage() {
             {/* Catalog Grid */}
             {catalogLoading ? (
               <div className="flex justify-center py-24">
-                <div className="h-7 w-7 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+                <div className="h-7 w-7 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
               </div>
             ) : catalogError ? (
-              <div className="text-center py-16 text-xs text-red-400">{catalogError}</div>
+              <div className="text-center py-16 text-xs text-red-405">{catalogError}</div>
             ) : paginatedCareers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {paginatedCareers.map((c) => (
                   <div
                     key={c.id}
-                    className="group rounded-2xl border border-neutral-900 bg-neutral-900/20 overflow-hidden flex flex-col justify-between hover:border-indigo-500/30 hover:bg-neutral-900/40 transition-all duration-300 shadow-lg"
+                    className="group glass-card hover:glass-card-hover overflow-hidden flex flex-col justify-between transition-all duration-300 rounded-2xl"
                   >
                     <div className="space-y-4">
                       {/* Technical Image */}
@@ -311,38 +314,38 @@ export default function ExplorePage() {
                         <img
                           src={c.image}
                           alt={c.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" />
-                        <span className="absolute top-3 right-3 bg-neutral-950 border border-neutral-800 text-[10px] text-indigo-400 font-bold px-2 py-0.5 rounded">
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent" />
+                        <span className="absolute top-3 right-3 bg-[#050816]/90 border border-white/[0.08] backdrop-blur-md text-[10px] text-blue-400 font-bold px-2 py-0.5 rounded-lg">
                           {c.difficulty}
                         </span>
                       </div>
 
                       {/* Info body */}
                       <div className="px-5 space-y-2 text-xs">
-                        <div className="flex justify-between items-center text-[10px] text-neutral-500 font-semibold">
+                        <div className="flex justify-between items-center text-[10px] text-slate-500 font-semibold">
                           <span>Duration: {c.duration}</span>
                           <span className="text-cyan-400 flex items-center gap-0.5">⭐ {c.rating}</span>
                         </div>
-                        <h3 className="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+                        <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
                           {c.title}
                         </h3>
-                        <p className="text-neutral-450 leading-relaxed line-clamp-3">
+                        <p className="text-slate-450 leading-relaxed line-clamp-3">
                           {c.desc}
                         </p>
                       </div>
                     </div>
 
                     {/* Bottom stats and button */}
-                    <div className="p-5 pt-6 mt-4 border-t border-neutral-900/40 flex items-center justify-between">
+                    <div className="p-5 pt-6 mt-4 border-t border-white/[0.05] flex items-center justify-between">
                       <div>
-                        <p className="text-[9px] text-neutral-500 font-semibold uppercase">Avg Salary</p>
+                        <p className="text-[9px] text-slate-500 font-semibold uppercase">Avg Salary</p>
                         <p className="text-xs font-bold text-emerald-400">{c.salary}</p>
                       </div>
                       <Link
                         href={`/roadmaps/${c.id}`}
-                        className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                        className="btn-primary hover:btn-primary-hover flex items-center gap-1 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all cursor-pointer"
                       >
                         View Details
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -354,12 +357,12 @@ export default function ExplorePage() {
               </div>
             ) : (
               <div className="text-center py-20 space-y-3">
-                <div className="h-10 w-10 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-500 mx-auto">
+                <div className="h-10 w-10 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center text-slate-500 mx-auto">
                   <ShieldAlert className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-neutral-350">No Tracks Found</h3>
-                  <p className="text-xs text-neutral-500 max-w-xs mx-auto mt-1">
+                  <h3 className="text-sm font-semibold text-slate-350">No Tracks Found</h3>
+                  <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">
                     No career path match your active filters. Try resetting controls to view all listings.
                   </p>
                 </div>
@@ -368,17 +371,17 @@ export default function ExplorePage() {
 
             {/* Numbered Pagination (1 2 3 4) */}
             {totalPages > 1 && (
-              <div className="pt-8 border-t border-neutral-900/40 flex justify-center items-center gap-1.5 text-xs">
+              <div className="pt-8 border-t border-white/[0.05] flex justify-center items-center gap-1.5 text-xs">
                 {Array.from({ length: Math.min(4, totalPages) }, (_, index) => {
                   const pageNum = index + 1;
                   return (
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`h-8 w-8 rounded-lg font-semibold transition-colors cursor-pointer ${
+                      className={`h-8 w-8 rounded-lg font-semibold transition-all cursor-pointer flex items-center justify-center ${
                         currentPage === pageNum
-                          ? "bg-indigo-600 text-white animate-pulse"
-                          : "bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white"
+                          ? "btn-primary shadow-lg scale-105"
+                          : "btn-secondary hover:btn-secondary-hover"
                       }`}
                     >
                       {pageNum}

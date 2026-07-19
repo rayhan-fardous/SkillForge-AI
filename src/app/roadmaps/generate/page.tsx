@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { Sparkles, ArrowLeft, ArrowRight, Brain, Settings2, Target, Clock, BookOpen } from "lucide-react";
+import { Sparkles, ArrowLeft, Brain, Settings2, Target, Clock, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function GenerateRoadmapPage() {
@@ -25,7 +25,7 @@ export default function GenerateRoadmapPage() {
     "Structuring step-by-step chronological roadmap milestones...",
     "Designing custom project checkpoints with tech stacks...",
     "Selecting official learning references and documentation...",
-    "Finalizing your custom roadmap layout in MongoDB..."
+    "Finalizing your custom roadmap layout in MongoDB...",
   ];
 
   useEffect(() => {
@@ -60,7 +60,6 @@ export default function GenerateRoadmapPage() {
         throw new Error(data.error || "Generation failed. Please try again.");
       }
 
-      // Redirect to the newly generated custom roadmap
       router.push(`/roadmaps/${data.id}`);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
@@ -68,13 +67,18 @@ export default function GenerateRoadmapPage() {
     }
   };
 
-  const inputClass = "w-full bg-neutral-950 border border-neutral-850 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500/60 transition-colors";
+  const inputClass = "w-full input-glass focus:input-glass-focus px-4 py-3";
+  const labelClass = "font-semibold text-slate-300 text-xs flex items-center gap-1.5";
 
   return (
     <ProtectedRoute>
-      <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/15 via-neutral-950 to-neutral-950 flex justify-center items-center">
-        <div className="w-full max-w-xl">
-          
+      <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-transparent relative overflow-hidden flex justify-center items-center min-h-[80vh]">
+        {/* Ambient glows */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-cyan-500/4 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="w-full max-w-xl relative z-10">
+
           <AnimatePresence mode="wait">
             {!isLoading ? (
               <motion.div
@@ -85,21 +89,21 @@ export default function GenerateRoadmapPage() {
                 className="space-y-8"
               >
                 {/* Back link and Header */}
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <Link
                     href="/roadmaps"
-                    className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-300 font-semibold"
+                    className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 font-semibold transition-colors group"
                   >
-                    <ArrowLeft className="h-3.5 w-3.5" />
+                    <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
                     Back to Explore
                   </Link>
-                  <div className="border-b border-neutral-900 pb-6 flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+                  <div className="border-b border-white/[0.06] pb-6 flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.2)] flex-shrink-0">
                       <Brain className="h-6 w-6" />
                     </div>
                     <div>
                       <h1 className="text-2xl font-extrabold text-white tracking-tight">AI Roadmap Forge</h1>
-                      <p className="text-xs text-neutral-450 mt-0.5">
+                      <p className="text-xs text-slate-500 mt-0.5">
                         Design a customized career development curriculum tailored to your specific background and goals.
                       </p>
                     </div>
@@ -107,9 +111,12 @@ export default function GenerateRoadmapPage() {
                 </div>
 
                 {/* Form Card */}
-                <div className="relative rounded-2xl border border-neutral-900 bg-neutral-900/30 p-6 sm:p-8 backdrop-blur-md space-y-6">
+                <div className="glass-card rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                  {/* Top glow accent */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+
                   {error && (
-                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-lg">
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl">
                       {error}
                     </div>
                   )}
@@ -117,13 +124,13 @@ export default function GenerateRoadmapPage() {
                   <form onSubmit={handleSubmit} className="space-y-5 text-xs">
                     {/* Career Interest */}
                     <div className="space-y-2">
-                      <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                        <Target className="h-3.5 w-3.5 text-neutral-500" />
+                      <label className={labelClass}>
+                        <Target className="h-3.5 w-3.5 text-blue-400" />
                         What is your specific career goal or technology interest?
                       </label>
                       <textarea
                         required
-                        rows={2}
+                        rows={3}
                         value={interest}
                         onChange={(e) => setInterest(e.target.value)}
                         placeholder="e.g. Master React Native to build mobile startups, or Learn cloud-native site reliability with AWS & Kubernetes..."
@@ -134,8 +141,8 @@ export default function GenerateRoadmapPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Skill level */}
                       <div className="space-y-2">
-                        <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                          <Settings2 className="h-3.5 w-3.5 text-neutral-500" />
+                        <label className={labelClass}>
+                          <Settings2 className="h-3.5 w-3.5 text-blue-400" />
                           Difficulty level
                         </label>
                         <select
@@ -151,8 +158,8 @@ export default function GenerateRoadmapPage() {
 
                       {/* Commitment */}
                       <div className="space-y-2">
-                        <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5 text-neutral-500" />
+                        <label className={labelClass}>
+                          <Clock className="h-3.5 w-3.5 text-blue-400" />
                           Time commitment
                         </label>
                         <select
@@ -171,8 +178,8 @@ export default function GenerateRoadmapPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Duration */}
                       <div className="space-y-2">
-                        <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5 text-neutral-500" />
+                        <label className={labelClass}>
+                          <Clock className="h-3.5 w-3.5 text-blue-400" />
                           Expected duration
                         </label>
                         <select
@@ -188,8 +195,8 @@ export default function GenerateRoadmapPage() {
 
                       {/* Focus Area */}
                       <div className="space-y-2">
-                        <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                          <BookOpen className="h-3.5 w-3.5 text-neutral-500" />
+                        <label className={labelClass}>
+                          <BookOpen className="h-3.5 w-3.5 text-blue-400" />
                           Primary learning focus
                         </label>
                         <select
@@ -199,19 +206,21 @@ export default function GenerateRoadmapPage() {
                         >
                           <option>Practical Projects</option>
                           <option>Conceptual Theory</option>
-                          <option>SRE & Operations</option>
+                          <option>SRE &amp; Operations</option>
                           <option>Interview Preparation</option>
                         </select>
                       </div>
                     </div>
 
-                    <button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
-                    >
-                      <Sparkles className="h-3.5 w-3.5" />
-                      Forge Custom Path
-                    </button>
+                    <div className="pt-1">
+                      <button
+                        type="submit"
+                        className="w-full btn-primary hover:btn-primary-hover text-white font-semibold text-xs py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Forge Custom Path
+                      </button>
+                    </div>
                   </form>
                 </div>
               </motion.div>
@@ -221,35 +230,51 @@ export default function GenerateRoadmapPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-center py-20 space-y-8 flex flex-col items-center justify-center"
+                className="text-center py-20 space-y-10 flex flex-col items-center justify-center"
               >
                 {/* Glowing Spinner */}
-                <div className="relative flex items-center justify-center w-24 h-24">
-                  <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full" />
-                  <div className="absolute inset-0 border-4 border-t-indigo-500 rounded-full animate-spin" />
-                  <Sparkles className="h-8 w-8 text-indigo-400 animate-pulse" />
+                <div className="relative flex items-center justify-center w-28 h-28">
+                  <div className="absolute inset-0 border-4 border-blue-500/10 rounded-full" />
+                  <div className="absolute inset-0 border-4 border-t-blue-500 border-r-cyan-500/50 rounded-full animate-spin" />
+                  <div className="absolute inset-4 border-2 border-blue-500/10 rounded-full" />
+                  <div className="absolute inset-4 border-2 border-t-cyan-400/60 rounded-full animate-spin" style={{ animationDuration: "1.5s", animationDirection: "reverse" }} />
+                  <Sparkles className="h-7 w-7 text-blue-400 animate-pulse" />
                 </div>
 
-                <div className="space-y-3 max-w-sm">
+                <div className="space-y-4 max-w-sm">
                   <h3 className="text-sm font-bold text-white tracking-tight">SkillForge AI is mapping your path</h3>
-                  
+
                   {/* Rotating status lines */}
                   <div className="h-10 flex items-center justify-center">
                     <AnimatePresence mode="wait">
                       <motion.p
                         key={loadingStep}
-                        initial={{ opacity: 0, y: 5 }}
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
+                        exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.3 }}
-                        className="text-xs text-indigo-400 font-medium"
+                        className="text-xs text-blue-400 font-medium"
                       >
                         {loadingTexts[loadingStep]}
                       </motion.p>
                     </AnimatePresence>
                   </div>
-                  
-                  <p className="text-[10px] text-neutral-500 leading-normal">
+
+                  {/* Progress dots */}
+                  <div className="flex items-center justify-center gap-1.5">
+                    {loadingTexts.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`h-1 rounded-full transition-all duration-500 ${
+                          i <= loadingStep
+                            ? "w-6 bg-blue-500"
+                            : "w-1.5 bg-white/[0.08]"
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <p className="text-[10px] text-slate-500 leading-normal">
                     This will take around 10-15 seconds. We connect vector models and organize learning milestones with MongoDB schemas.
                   </p>
                 </div>

@@ -172,18 +172,22 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col w-full bg-neutral-950 text-neutral-100 overflow-x-hidden">
+    <div className="flex flex-col w-full bg-transparent text-slate-100 overflow-x-hidden relative">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-24 pb-28 md:pt-36 md:pb-40 border-b border-neutral-900 bg-radial-[at_50%_0%] from-indigo-950/20 via-neutral-950 to-neutral-950">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-8">
+      <section className="relative pt-24 pb-28 md:pt-36 md:pb-40 border-b border-white/[0.06] overflow-hidden">
+        {/* Glow circles for Hero specifically */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
           {/* Sparkle Badge */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-medium backdrop-blur-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-xs font-medium backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
             SkillForge AI - Your AI Career Mentor & Learning Roadmap Assistant
           </motion.div>
 
@@ -192,10 +196,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl max-w-4xl mx-auto leading-[1.1]"
+            className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl max-w-4xl mx-auto leading-[1.1] text-white"
           >
             Forge Your Career Path. <br className="hidden sm:inline" />
-            Guided by <span className="bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-500 bg-clip-text text-transparent">Agentic AI</span>.
+            Guided by <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">Agentic AI</span>.
           </motion.h1>
 
           {/* Subtitle */}
@@ -203,7 +207,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-neutral-400 leading-relaxed"
+            className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-400 leading-relaxed"
           >
             Discover career tracks, generate customized study checklists, build AI-graded portfolios, and debug with a 24/7 technical mentor.
           </motion.p>
@@ -217,14 +221,14 @@ export default function Home() {
           >
             <Link
               href="/roadmaps"
-              className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all duration-300 group cursor-pointer w-full sm:w-auto justify-center"
+              className="btn-primary hover:btn-primary-hover flex items-center gap-2 text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-xl transition-all duration-300 group cursor-pointer w-full sm:w-auto justify-center"
             >
               Explore Roadmaps
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
               href="#ai-features"
-              className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-250 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-300 w-full sm:w-auto justify-center"
+              className="btn-secondary hover:btn-secondary-hover flex items-center gap-2 text-slate-200 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-300 w-full sm:w-auto justify-center"
             >
               Explore AI Features
             </a>
@@ -233,11 +237,11 @@ export default function Home() {
       </section>
 
       {/* 2. FEATURED CAREER PATHS */}
-      <section className="py-20 border-b border-neutral-900 bg-neutral-950">
+      <section className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16">
             <h2 className="text-2xl font-bold md:text-3xl text-white">Featured Career Paths</h2>
-            <p className="text-sm text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
               Select one of our popular engineering tracks to generate visual checkpoint roadmaps and get custom tasks.
             </p>
           </div>
@@ -246,43 +250,43 @@ export default function Home() {
             {featuredCareers.map((c) => (
               <div
                 key={c.id}
-                className="group rounded-2xl border border-neutral-900 bg-neutral-900/30 overflow-hidden flex flex-col justify-between hover:border-indigo-500/30 hover:bg-neutral-900/50 transition-all duration-300 shadow-xl"
+                className="group glass-card hover:glass-card-hover overflow-hidden flex flex-col justify-between transition-all duration-300 rounded-2xl"
               >
                 <div className="space-y-4">
                   <div className="h-44 w-full relative overflow-hidden">
                     <img
                       src={c.image}
                       alt={c.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" />
-                    <span className="absolute top-3 right-3 bg-neutral-950 border border-neutral-800 text-[10px] text-indigo-400 font-bold px-2 py-0.5 rounded">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent" />
+                    <span className="absolute top-3 right-3 bg-[#050816]/90 border border-white/[0.08] backdrop-blur-md text-[10px] text-blue-400 font-bold px-2 py-0.5 rounded-lg">
                       {c.difficulty}
                     </span>
                   </div>
 
                   <div className="px-5 space-y-2">
-                    <div className="flex justify-between items-center text-[10px] text-neutral-500">
+                    <div className="flex justify-between items-center text-[10px] text-slate-500">
                       <span>Duration: {c.duration}</span>
                       <span className="text-cyan-400 font-semibold">⭐ {c.rating} Rating</span>
                     </div>
-                    <h3 className="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+                    <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
                       {c.title}
                     </h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-slate-450 leading-relaxed line-clamp-3">
                       {c.desc}
                     </p>
                   </div>
                 </div>
 
-                <div className="p-5 pt-6 mt-4 border-t border-neutral-900/40 flex items-center justify-between">
+                <div className="p-5 pt-6 mt-4 border-t border-white/[0.05] flex items-center justify-between">
                   <div>
-                    <p className="text-[9px] text-neutral-500 font-semibold uppercase">Avg Salary</p>
+                    <p className="text-[9px] text-slate-500 font-semibold uppercase">Avg Salary</p>
                     <p className="text-xs font-bold text-emerald-400">{c.salary}</p>
                   </div>
                   <Link
                     href={`/roadmaps/${c.id}`}
-                    className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                    className="btn-primary hover:btn-primary-hover flex items-center gap-1 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all cursor-pointer"
                   >
                     View Details
                     <ArrowRight className="h-3 w-3" />
@@ -295,14 +299,14 @@ export default function Home() {
       </section>
 
       {/* 3. AI FEATURES */}
-      <section id="ai-features" className="py-20 border-b border-neutral-900 bg-neutral-900/10">
+      <section id="ai-features" className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16">
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-medium">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-xs font-medium shadow-[0_0_10px_rgba(59,130,246,0.1)]">
               Intelligence Engine
             </span>
             <h2 className="text-2xl font-bold md:text-3xl text-white">Full-Suite AI Assistance</h2>
-            <p className="text-sm text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
               Our agentic platform handles the structure so you can focus on writing compilable code files.
             </p>
           </div>
@@ -313,14 +317,14 @@ export default function Home() {
               return (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-neutral-900 bg-neutral-900/30 p-6 space-y-4 hover:border-indigo-500/20 transition-all duration-300 shadow-md"
+                  className="glass-card hover:glass-card-hover p-6 space-y-4 transition-all duration-300 rounded-2xl"
                 >
-                  <div className="h-9 w-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.1)]">
+                  <div className="h-9 w-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.1)]">
                     <IconComp className="h-4.5 w-4.5" />
                   </div>
                   <div className="space-y-1.5">
                     <h3 className="text-xs font-bold text-white uppercase tracking-wider">{f.title}</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">{f.desc}</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
                   </div>
                 </div>
               );
@@ -330,34 +334,34 @@ export default function Home() {
       </section>
 
       {/* 4. POPULAR LEARNING ROADMAPS */}
-      <section className="py-20 border-b border-neutral-900 bg-neutral-950">
+      <section className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="text-center space-y-3 mb-16">
             <h2 className="text-2xl font-bold md:text-3xl text-white">Popular Learning Roadmaps</h2>
-            <p className="text-sm text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
               A visual timeline demonstration of the four critical roadmap stages generated for students.
             </p>
           </div>
 
-          <div className="relative border-l border-neutral-800 ml-4 md:ml-32 space-y-8 text-xs">
+          <div className="relative border-l border-white/[0.08] ml-4 md:ml-32 space-y-8 text-xs">
             {timelineMilestones.map((m, idx) => (
               <div key={idx} className="relative pl-6 md:pl-8">
                 {/* Node circle */}
-                <div className="absolute -left-3.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-neutral-950 border border-neutral-800 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                <div className="absolute -left-3.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-[#050816] border border-white/[0.08] text-blue-400 shadow-[0_0_10px_rgba(59,130,241,0.2)]">
                   <span className="text-[10px] font-bold">{idx + 1}</span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-2 items-start bg-neutral-900/20 border border-neutral-900 p-4 rounded-xl hover:border-indigo-500/20 transition-all">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-2 items-start glass-card hover:glass-card-hover p-4 rounded-xl transition-all duration-300">
                   <div className="md:col-span-1">
-                    <span className="bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[9px]">
+                    <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[9px]">
                       {m.phase}
                     </span>
                   </div>
                   <div className="md:col-span-2">
-                    <h4 className="font-semibold text-neutral-200">{m.name}</h4>
+                    <h4 className="font-semibold text-slate-200">{m.name}</h4>
                   </div>
                   <div className="md:col-span-1 md:text-right">
-                    <span className="text-neutral-500 font-semibold">{m.duration}</span>
+                    <span className="text-slate-500 font-semibold">{m.duration}</span>
                   </div>
                 </div>
               </div>
@@ -367,15 +371,15 @@ export default function Home() {
       </section>
 
       {/* 5. SUCCESS STATISTICS */}
-      <section className="py-16 border-b border-neutral-900 bg-neutral-900/10">
+      <section className="py-16 border-b border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {successStats.map((s, idx) => (
               <div key={idx} className="text-center space-y-1">
-                <p className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                <p className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                   {s.value}
                 </p>
-                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">
+                <p className="text-[10px] text-slate-550 font-bold uppercase tracking-wider">
                   {s.label}
                 </p>
               </div>
@@ -385,11 +389,11 @@ export default function Home() {
       </section>
 
       {/* 6. STUDENT TESTIMONIALS */}
-      <section className="py-20 border-b border-neutral-900 bg-neutral-950">
+      <section className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16">
             <h2 className="text-2xl font-bold md:text-3xl text-white">Student Testimonials</h2>
-            <p className="text-sm text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
               Hear verified feedback from engineers who transitioned careers using customized paths.
             </p>
           </div>
@@ -398,20 +402,20 @@ export default function Home() {
             {testimonials.map((t, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-neutral-900 bg-neutral-900/20 p-6 sm:p-8 space-y-4 hover:border-neutral-800 transition-colors"
+                className="glass-card hover:glass-card-hover p-6 sm:p-8 space-y-4 rounded-2xl transition-all duration-300"
               >
-                <p className="text-xs text-neutral-400 leading-relaxed italic">
+                <p className="text-xs text-slate-400 leading-relaxed italic">
                   &quot;{t.text}&quot;
                 </p>
                 <div className="flex items-center gap-3">
                   <img
                     src={t.img}
                     alt={t.name}
-                    className="h-10 w-10 rounded-full object-cover border border-indigo-500/20"
+                    className="h-10 w-10 rounded-full object-cover border border-blue-500/20"
                   />
                   <div>
                     <h4 className="text-xs font-bold text-white">{t.name}</h4>
-                    <p className="text-[10px] text-neutral-500">{t.role}</p>
+                    <p className="text-[10px] text-slate-550">{t.role}</p>
                   </div>
                 </div>
               </div>
@@ -421,16 +425,16 @@ export default function Home() {
       </section>
 
       {/* 7. BLOGS */}
-      <section className="py-20 border-b border-neutral-900 bg-neutral-900/10">
+      <section className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-16">
             <div>
               <h2 className="text-2xl font-bold md:text-3xl text-white">Insights & Developer Blogs</h2>
-              <p className="text-sm text-neutral-400 mt-1">Read expert columns on coding architectures and skill systems.</p>
+              <p className="text-sm text-slate-400 mt-1">Read expert columns on coding architectures and skill systems.</p>
             </div>
             <Link
               href="/blogs"
-              className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 font-bold uppercase tracking-wider transition-colors"
+              className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider transition-colors"
             >
               Explore Blogs
               <ArrowRight className="h-3.5 w-3.5" />
@@ -441,17 +445,17 @@ export default function Home() {
             {blogs.map((b, idx) => (
               <div
                 key={idx}
-                className="group rounded-2xl border border-neutral-900 bg-neutral-900/20 p-6 space-y-4 hover:border-indigo-500/20 transition-all shadow-md"
+                className="group glass-card hover:glass-card-hover p-6 space-y-4 transition-all duration-300 rounded-2xl"
               >
-                <div className="flex justify-between items-center text-[10px] text-neutral-500">
+                <div className="flex justify-between items-center text-[10px] text-slate-500">
                   <span>{b.date}</span>
                   <span>{b.readTime}</span>
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
                     {b.title}
                   </h3>
-                  <p className="text-xs text-neutral-450 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-slate-450 leading-relaxed line-clamp-3">
                     {b.desc}
                   </p>
                 </div>
@@ -462,11 +466,11 @@ export default function Home() {
       </section>
 
       {/* 8. FAQ ACCORDION */}
-      <section className="py-20 border-b border-neutral-900 bg-neutral-950">
+      <section className="py-20 border-b border-white/[0.06]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="text-center space-y-3 mb-16">
             <h2 className="text-2xl font-bold md:text-3xl text-white">Frequently Asked Questions</h2>
-            <p className="text-sm text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
               Everything you need to know about SkillForge AI career acceleration.
             </p>
           </div>
@@ -477,14 +481,14 @@ export default function Home() {
               return (
                 <div
                   key={idx}
-                  className="rounded-xl border border-neutral-850 bg-neutral-900/10 overflow-hidden"
+                  className="glass-card rounded-2xl overflow-hidden border border-white/[0.06]"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full flex justify-between items-center p-5 text-left text-xs font-semibold text-white hover:bg-neutral-900/20 transition-colors select-none cursor-pointer"
+                    className="w-full flex justify-between items-center p-5 text-left text-xs font-semibold text-white hover:bg-white/[0.03] transition-colors select-none cursor-pointer"
                   >
                     <span>{item.q}</span>
-                    <ChevronDown className={`h-4 w-4 text-neutral-500 transition-transform duration-200 ${isOpen ? "rotate-180 text-indigo-400" : ""}`} />
+                    <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform duration-200 ${isOpen ? "rotate-180 text-blue-400" : ""}`} />
                   </button>
 
                   <AnimatePresence initial={false}>
@@ -495,7 +499,7 @@ export default function Home() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <div className="p-5 pt-0 text-xs text-neutral-450 border-t border-neutral-900/50 leading-relaxed bg-neutral-900/10">
+                        <div className="p-5 pt-0 text-xs text-slate-400 border-t border-white/[0.05] leading-relaxed bg-white/[0.01]">
                           {item.a}
                         </div>
                       </motion.div>
@@ -509,26 +513,27 @@ export default function Home() {
       </section>
 
       {/* 9. CTA SECTION */}
-      <section className="py-24 bg-gradient-to-br from-indigo-950/20 via-neutral-950 to-neutral-950 text-center relative overflow-hidden border-b border-neutral-900">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="py-24 border-b border-white/[0.06] text-center relative overflow-hidden">
+        {/* Spot ambient glow behind CTA */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
           <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
             Start Forging Your Path Today
           </h2>
-          <p className="text-sm sm:text-base text-neutral-400 leading-relaxed max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl mx-auto">
             Take control of your learning. Let AI structure your career progression, critique your code, and guide you to your dream job.
           </p>
           <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link
               href="/register"
-              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all duration-300 cursor-pointer"
+              className="w-full sm:w-auto btn-primary hover:btn-primary-hover inline-flex justify-center items-center gap-2 text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-xl transition-all duration-350 cursor-pointer"
             >
               Create Free Account
             </Link>
             <Link
               href="/about"
-              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-neutral-900 border border-neutral-800 hover:bg-neutral-850 text-neutral-200 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-300"
+              className="w-full sm:w-auto btn-secondary hover:btn-secondary-hover inline-flex justify-center items-center gap-2 text-slate-200 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-300"
             >
               Read Platform Mission
             </Link>
@@ -537,15 +542,15 @@ export default function Home() {
       </section>
 
       {/* 10. NEWSLETTER */}
-      <section className="py-16 bg-neutral-950 text-center border-b border-neutral-900">
+      <section className="py-16 text-center border-b border-white/[0.06]">
         <div className="mx-auto max-w-md px-4 space-y-4">
           <div className="space-y-1">
             <h3 className="text-base font-bold text-white">Join the Newsletter</h3>
-            <p className="text-xs text-neutral-500">Subscribe for custom career insights and monthly roadmap frameworks.</p>
+            <p className="text-xs text-slate-500">Subscribe for custom career insights and monthly roadmap frameworks.</p>
           </div>
 
           {newsletterSubscribed ? (
-            <div className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 py-2.5 rounded-lg">
+            <div className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 py-2.5 rounded-xl">
               Check your inbox! We have dispatched a verification email.
             </div>
           ) : (
@@ -556,11 +561,11 @@ export default function Home() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@domain.com"
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full input-glass focus:input-glass-focus"
               />
               <button
                 type="submit"
-                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
+                className="btn-primary hover:btn-primary-hover text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer"
               >
                 Subscribe
               </button>

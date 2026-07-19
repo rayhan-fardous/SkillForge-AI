@@ -91,34 +91,31 @@ export default function RegisterPage() {
     } finally {
       setIsGoogleLoading(false);
     }
-  };
-
-  const inputClass = (hasError: boolean) =>
-    `w-full bg-neutral-950 border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none transition-colors ${
+  };  const inputClass = (hasError: boolean) =>
+    `w-full input-glass text-xs text-white focus:outline-none transition-all duration-300 ${
       hasError
-        ? "border-red-500/60 focus:border-red-500"
-        : "border-neutral-800 focus:border-indigo-500/60"
+        ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_12px_rgba(239,68,68,0.2)]"
+        : "focus:input-glass-focus"
     }`;
 
   return (
-    <div className="flex-1 flex items-center justify-center p-6 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/15 via-neutral-950 to-neutral-950">
+    <div className="flex-1 flex items-center justify-center p-6 bg-transparent relative overflow-hidden">
+      {/* Decorative ambient glows behind container */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-sm"
+        className="w-full max-w-sm relative z-10"
       >
-        <div className="relative rounded-2xl border border-neutral-900 bg-neutral-900/50 p-8 backdrop-blur-md shadow-2xl overflow-hidden space-y-5">
-          {/* Glow decorations */}
-          <div className="absolute -top-16 -right-16 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/5 rounded-full blur-2xl pointer-events-none" />
-
+        <div className="relative rounded-3xl glass-card p-8 shadow-2xl overflow-hidden space-y-5">
           {/* Header */}
           <div className="text-center space-y-2 relative">
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600/30 to-cyan-600/20 text-indigo-400 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
-              <UserPlus className="h-5 w-5" />
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,241,0.15)]">
+              <UserPlus className="h-5 w-5 text-cyan-400" />
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">Create Account</h1>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-slate-400">
               Start forging your custom career path. Free tier available.
             </p>
           </div>
@@ -128,7 +125,7 @@ export default function RegisterPage() {
             type="button"
             onClick={handleGoogleSignUp}
             disabled={isGoogleLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white/[0.04] hover:bg-white/[0.07] border border-neutral-800 hover:border-neutral-700 text-neutral-200 font-semibold text-xs py-2.5 rounded-xl transition-all duration-200 cursor-pointer"
+            className="w-full flex items-center justify-center gap-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] text-slate-200 hover:text-white font-semibold text-xs py-2.5 rounded-xl transition-all duration-300 cursor-pointer shadow-lg hover:scale-[1.01]"
           >
             {isGoogleLoading ? (
               <div className="h-4 w-4 rounded-full border-2 border-neutral-500 border-t-white animate-spin" />
@@ -145,9 +142,9 @@ export default function RegisterPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-neutral-900" />
-            <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wider">or register with email</span>
-            <div className="flex-1 h-px bg-neutral-900" />
+            <div className="flex-1 h-px bg-white/[0.06]" />
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">or register with email</span>
+            <div className="flex-1 h-px bg-white/[0.06]" />
           </div>
 
           {/* Server error */}
@@ -157,7 +154,7 @@ export default function RegisterPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-3.5 py-2.5 rounded-lg"
+                className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-3.5 py-2.5 rounded-xl"
               >
                 <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
                 <span>{serverError}</span>
@@ -168,7 +165,7 @@ export default function RegisterPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs px-3.5 py-2.5 rounded-lg"
+                className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs px-3.5 py-2.5 rounded-xl"
               >
                 <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
                 <span>{successMessage}</span>
@@ -180,7 +177,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-xs" noValidate>
             {/* Full Name */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-neutral-300">Full Name</label>
+              <label className="font-semibold text-slate-350">Full Name</label>
               <input
                 {...register("name")}
                 type="text"
@@ -198,7 +195,7 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-neutral-300">Email Address</label>
+              <label className="font-semibold text-slate-350">Email Address</label>
               <input
                 {...register("email")}
                 type="email"
@@ -216,7 +213,7 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-neutral-300">Password</label>
+              <label className="font-semibold text-slate-350">Password</label>
               <div className="relative">
                 <input
                   {...register("password")}
@@ -228,7 +225,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                 </button>
@@ -242,12 +239,12 @@ export default function RegisterPage() {
                       <div
                         key={i}
                         className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                          i <= strength.score ? strength.color : "bg-neutral-800"
+                          i <= strength.score ? strength.color : "bg-white/[0.06]"
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="text-[10px] text-neutral-500">
+                  <p className="text-[10px] text-slate-500">
                     Strength: <span className={`font-semibold ${strength.score >= 3 ? "text-emerald-400" : strength.score === 2 ? "text-amber-400" : "text-red-400"}`}>{strength.label}</span>
                   </p>
                 </div>
@@ -263,7 +260,7 @@ export default function RegisterPage() {
 
             {/* Confirm Password */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-neutral-300">Confirm Password</label>
+              <label className="font-semibold text-slate-350">Confirm Password</label>
               <div className="relative">
                 <input
                   {...register("confirmPassword")}
@@ -275,7 +272,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
                 >
                   {showConfirmPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                 </button>
@@ -287,12 +284,12 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-              <br/>
+            <br/>
             {/* Submit */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 disabled:from-neutral-800 disabled:to-neutral-800 disabled:text-neutral-500 text-white font-semibold text-xs py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
+              className="w-full btn-primary hover:btn-primary-hover disabled:bg-white/[0.02] disabled:text-slate-650 text-white font-semibold text-xs py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/10"
             >
               {isSubmitting ? (
                 <>
@@ -301,7 +298,7 @@ export default function RegisterPage() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-3.5 w-3.5 text-cyan-200 animate-pulse" />
                   Create Account & Start
                 </>
               )}
@@ -309,9 +306,9 @@ export default function RegisterPage() {
           </form>
 
           {/* Footer */}
-          <p className="text-center text-[10px] text-neutral-500">
+          <p className="text-center text-[10px] text-slate-500">
             Already have an account?{" "}
-            <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors">
+            <Link href="/login" className="text-blue-400 hover:text-blue-300 font-bold transition-colors">
               Sign In
             </Link>
           </p>

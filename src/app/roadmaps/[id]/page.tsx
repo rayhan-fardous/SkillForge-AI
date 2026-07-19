@@ -325,8 +325,8 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[60vh] bg-neutral-950">
-        <div className="h-6 w-6 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+      <div className="flex-1 flex items-center justify-center min-h-[60vh] bg-transparent">
+        <div className="h-6 w-6 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -336,28 +336,29 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
   }
 
   return (
-    <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 bg-radial-[at_50%_0%] from-indigo-950/10 via-neutral-950 to-neutral-950">
-      <div className="mx-auto max-w-4xl space-y-10">
+    <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-transparent relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-72 bg-blue-500/4 rounded-full blur-[120px] pointer-events-none" />
+      <div className="mx-auto max-w-4xl space-y-10 relative z-10">
         
         {/* Back Link */}
         <div>
           <Link
             href="/roadmaps"
-            className="inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-300 font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 font-semibold transition-colors group"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
+            <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
             Back to Explore Page
           </Link>
         </div>
 
         {/* Header Block */}
-        <div className="border-b border-neutral-900 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div className="border-b border-white/[0.06] pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="bg-indigo-500/10 text-indigo-400 px-2.5 py-0.5 rounded font-bold uppercase tracking-wider">
+              <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-lg font-bold uppercase tracking-wider">
                 {data.difficulty} Track
               </span>
-              <span className="text-neutral-500 font-semibold flex items-center gap-1">
+              <span className="text-slate-500 font-semibold flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 Est: {data.duration}
               </span>
@@ -371,19 +372,19 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
             <div className="flex flex-col items-end gap-1.5 w-full md:w-auto">
               <button
                 onClick={enrollInPath}
-                className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/20"
+                className="w-full md:w-auto btn-primary hover:btn-primary-hover inline-flex justify-center items-center gap-2 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-blue-500/10"
               >
                 Enroll in Path
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
               {enrollSuccess && (
-                <span className="text-[10px] text-indigo-400 font-semibold">{enrollSuccess}</span>
+                <span className="text-[10px] text-blue-400 font-semibold">{enrollSuccess}</span>
               )}
             </div>
           ) : (
             <Link
               href="/register"
-              className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/20"
+              className="w-full md:w-auto btn-primary hover:btn-primary-hover inline-flex justify-center items-center gap-2 text-white font-semibold text-xs px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-blue-500/10"
             >
               Enroll in Path
               <ArrowRight className="h-3.5 w-3.5" />
@@ -393,49 +394,49 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
 
         {/* 1. OVERVIEW */}
         <section className="space-y-3">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <Compass className="h-4 w-4 text-indigo-400" />
+          <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+            <Compass className="h-4 w-4 text-blue-400" />
             Overview
           </h2>
-          <p className="text-xs text-neutral-300 leading-relaxed bg-neutral-900/10 border border-neutral-900 p-5 rounded-xl">
+          <p className="text-xs text-slate-300 leading-relaxed glass-card p-5 rounded-xl">
             {data.overview}
           </p>
         </section>
 
         {/* 2. REQUIRED SKILLS */}
         <section className="space-y-4">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <Award className="h-4 w-4 text-indigo-400" />
+          <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+            <Award className="h-4 w-4 text-blue-400" />
             Required Skills
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-            <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
-              <h3 className="font-semibold text-neutral-200">Beginner Foundations</h3>
+            <div className="glass-card p-4 space-y-3 rounded-2xl">
+              <h3 className="font-semibold text-slate-200">Beginner Foundations</h3>
               <div className="flex flex-wrap gap-1.5">
                 {(data.skills?.beginner || []).map((s: string, idx: number) => (
-                  <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-neutral-400">
+                  <span key={idx} className="bg-white/[0.03] border border-white/[0.07] rounded-lg px-2 py-0.5 text-[10px] text-slate-400">
                     {s}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
-              <h3 className="font-semibold text-neutral-200">Intermediate Core</h3>
+            <div className="glass-card p-4 space-y-3 rounded-2xl">
+              <h3 className="font-semibold text-slate-200">Intermediate Core</h3>
               <div className="flex flex-wrap gap-1.5">
                 {(data.skills?.intermediate || []).map((s: string, idx: number) => (
-                  <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-indigo-400">
+                  <span key={idx} className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-2 py-0.5 text-[10px] text-blue-400">
                     {s}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-3">
-              <h3 className="font-semibold text-neutral-200">Advanced Systems</h3>
+            <div className="glass-card p-4 space-y-3 rounded-2xl">
+              <h3 className="font-semibold text-slate-200">Advanced Systems</h3>
               <div className="flex flex-wrap gap-1.5">
                 {(data.skills?.advanced || []).map((s: string, idx: number) => (
-                  <span key={idx} className="bg-neutral-950 border border-neutral-900 rounded px-2 py-0.5 text-[10px] text-cyan-400">
+                  <span key={idx} className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg px-2 py-0.5 text-[10px] text-cyan-400">
                     {s}
                   </span>
                 ))}
@@ -446,20 +447,20 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
 
         {/* 3. CAREER ROADMAP TIMELINE */}
         <section className="space-y-4">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <Activity className="h-4 w-4 text-indigo-400" />
+          <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+            <Activity className="h-4 w-4 text-blue-400" />
             Career Roadmap Milestones
           </h2>
-          <div className="border-l border-neutral-850 ml-4 space-y-6 text-xs">
+          <div className="border-l border-white/[0.06] ml-4 space-y-6 text-xs">
             {(data.roadmap || []).map((node: any) => (
               <div key={node.step} className="relative pl-6">
-                <div className="absolute -left-2.5 top-1 h-5 w-5 rounded-full bg-neutral-950 border border-neutral-800 text-indigo-400 flex items-center justify-center text-[10px] font-bold">
+                <div className="absolute -left-2.5 top-1 h-5 w-5 rounded-full bg-[#0B1120] border border-blue-500/30 text-blue-400 flex items-center justify-center text-[10px] font-bold shadow-[0_0_8px_rgba(59,130,246,0.2)]">
                   {node.step}
                 </div>
-                <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-xl space-y-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="glass-card p-4 rounded-xl space-y-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="space-y-1">
-                    <h4 className="font-semibold text-neutral-200">{node.title}</h4>
-                    <p className="text-neutral-500 leading-relaxed">{node.desc}</p>
+                    <h4 className="font-semibold text-slate-200">{node.title}</h4>
+                    <p className="text-slate-500 leading-relaxed">{node.desc}</p>
                   </div>
                   {isLoggedIn && (
                     <button
@@ -468,7 +469,7 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
                       className={`flex-shrink-0 flex items-center justify-center h-8 px-2.5 rounded-lg border text-[10px] font-bold transition-all cursor-pointer ${
                         addedGoals[node.title]
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                          : "bg-neutral-900 border-neutral-850 hover:border-neutral-750 text-neutral-350 hover:text-white"
+                          : "bg-white/[0.03] border-white/[0.08] hover:border-white/[0.15] text-slate-400 hover:text-white"
                       }`}
                     >
                       {addedGoals[node.title] ? (
@@ -487,26 +488,26 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
         {/* 4. AVERAGE SALARY METRICS — only for static roadmaps that have salary data */}
         {data.salaryEntry && (
           <section className="space-y-3">
-            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-              <DollarSign className="h-4 w-4 text-indigo-400" />
+            <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+              <DollarSign className="h-4 w-4 text-blue-400" />
               Average Salary Scale
             </h2>
-            <div className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-5 space-y-4 text-xs">
-              <div className="grid grid-cols-3 gap-4 border-b border-neutral-900 pb-3">
+            <div className="glass-card p-5 space-y-4 rounded-2xl text-xs">
+              <div className="grid grid-cols-3 gap-4 border-b border-white/[0.06] pb-3">
                 <div>
-                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Entry Level</p>
+                  <p className="text-[10px] text-slate-500 uppercase font-semibold">Entry Level</p>
                   <p className="text-sm font-bold text-white mt-0.5">{data.salaryEntry}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Mid Trajectory</p>
+                  <p className="text-[10px] text-slate-500 uppercase font-semibold">Mid Trajectory</p>
                   <p className="text-sm font-bold text-cyan-400 mt-0.5">{data.salaryMid}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-neutral-500 uppercase font-semibold">Senior Target</p>
+                  <p className="text-[10px] text-slate-500 uppercase font-semibold">Senior Target</p>
                   <p className="text-sm font-bold text-emerald-400 mt-0.5">{data.salarySenior}</p>
                 </div>
               </div>
-              <p className="text-[10px] text-neutral-500">
+              <p className="text-[10px] text-slate-500">
                 *Averages compiled from local startup indexes and global tech telemetry.
               </p>
             </div>
@@ -515,20 +516,20 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
 
         {/* 5. LEARNING RESOURCES CHECKLIST */}
         <section className="space-y-3">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="h-4 w-4 text-indigo-400" />
+          <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+            <BookOpen className="h-4 w-4 text-blue-400" />
             Learning Resources Checkpoints
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {(data.resources || []).map((res: any, idx: number) => (
               <div
                 key={idx}
-                className="flex items-center gap-3 p-3 bg-neutral-905 border border-neutral-900 rounded-xl"
+                className="flex items-center gap-3 p-3 glass-card hover:glass-card-hover rounded-xl transition-all duration-200"
               >
-                <CheckCircle2 className="h-4.5 w-4.5 text-cyan-400 flex-shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-cyan-400 flex-shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-neutral-250">{res.name}</h4>
-                  <p className="text-[9px] text-neutral-500 uppercase tracking-wider mt-0.5">{res.type}</p>
+                  <h4 className="font-semibold text-slate-250">{res.name}</h4>
+                  <p className="text-[9px] text-slate-500 uppercase tracking-wider mt-0.5">{res.type}</p>
                 </div>
               </div>
             ))}
@@ -538,22 +539,22 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
         {/* 6. STUDENT REVIEWS — only for static roadmaps */}
         {data.reviews?.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-              <Star className="h-4 w-4 text-indigo-400" />
+            <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+              <Star className="h-4 w-4 text-blue-400" />
               Student Reviews
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
               {(data.reviews || []).map((rev: any, idx: number) => (
-                <div key={idx} className="rounded-xl border border-neutral-900 bg-neutral-900/20 p-4 space-y-2">
+                <div key={idx} className="glass-card p-4 space-y-2 rounded-2xl">
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold text-neutral-300">{rev.name}</span>
-                    <div className="flex gap-0.5 text-indigo-400">
+                    <span className="font-semibold text-slate-300">{rev.name}</span>
+                    <div className="flex gap-0.5 text-amber-400">
                       {Array.from({ length: rev.rating }, (_, i) => (
                         <Star key={i} className="h-3.5 w-3.5 fill-current" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-neutral-500 italic leading-relaxed">&quot;{rev.comment}&quot;</p>
+                  <p className="text-slate-500 italic leading-relaxed">&quot;{rev.comment}&quot;</p>
                 </div>
               ))}
             </div>
@@ -563,16 +564,16 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
         {/* 7. RELATED CAREER PATHS — only for static roadmaps */}
         {data.related?.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Related Career Paths</h2>
+            <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider">Related Career Paths</h2>
             <div className="flex flex-wrap gap-2 text-xs">
               {(data.related || []).map((rel: any) => (
                 <Link
                   key={rel.id}
                   href={`/roadmaps/${rel.id}`}
-                  className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-850 hover:border-neutral-700 text-neutral-300 hover:text-white px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 btn-secondary hover:btn-secondary-hover px-3.5 py-2 rounded-xl transition-all cursor-pointer group"
                 >
                   <span>{rel.title}</span>
-                  <ChevronRight className="h-3 w-3 text-neutral-500" />
+                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               ))}
             </div>
@@ -581,28 +582,28 @@ export default function DetailsPage({ params }: { params: Promise<{ id: string }
 
         {/* 8. RECOMMENDED PROJECTS */}
         <section className="space-y-4">
-          <h2 className="text-xs font-bold text-neutral-450 uppercase tracking-wider flex items-center gap-1.5">
-            <Cpu className="h-4 w-4 text-indigo-400" />
+          <h2 className="text-xs font-bold text-slate-450 uppercase tracking-wider flex items-center gap-1.5">
+            <Cpu className="h-4 w-4 text-blue-400" />
             Recommended Projects Checkpoints
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {(data.projects || []).map((proj: any, idx: number) => (
               <div
                 key={idx}
-                className="rounded-xl border border-neutral-900 bg-neutral-900/30 p-4 flex flex-col justify-between hover:border-neutral-800 transition-colors"
+                className="glass-card hover:glass-card-hover p-4 flex flex-col justify-between rounded-2xl transition-all duration-300"
               >
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="bg-neutral-950 border border-neutral-900 text-[9px] font-bold text-indigo-400 px-2 py-0.5 rounded">
+                    <span className="bg-blue-500/10 border border-blue-500/20 text-[9px] font-bold text-blue-400 px-2 py-0.5 rounded-lg">
                       {proj.diff} Checkpoint
                     </span>
-                    <span className="text-[10px] text-neutral-500 font-semibold">{proj.hours} Est</span>
+                    <span className="text-[10px] text-slate-500 font-semibold">{proj.hours} Est</span>
                   </div>
                   <h3 className="font-bold text-white">{proj.title}</h3>
                 </div>
                 <div className="flex flex-wrap gap-1.5 pt-4">
                   {proj.stack.map((t: string, tIdx: number) => (
-                    <span key={tIdx} className="bg-neutral-950 border border-neutral-900 rounded px-1.5 py-0.5 text-[9px] text-neutral-400">
+                    <span key={tIdx} className="bg-white/[0.03] border border-white/[0.07] rounded-lg px-1.5 py-0.5 text-[9px] text-slate-400">
                       {t}
                     </span>
                   ))}
