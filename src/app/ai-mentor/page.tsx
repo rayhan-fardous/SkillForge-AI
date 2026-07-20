@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { MessageSquare, Cpu, Terminal, ShieldAlert } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 export default function AIMentorPage() {
   const [messages, setMessages] = useState([
@@ -11,7 +11,7 @@ export default function AIMentorPage() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -20,17 +20,25 @@ export default function AIMentorPage() {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      let reply = "That's a very advanced system design question! For distributed architectures, ensure you establish strong state coordination (e.g. using Raft consensus or Redis cache queues) to mitigate partition errors.";
-      if (userMsg.toLowerCase().includes("kubernetes") || userMsg.toLowerCase().includes("docker")) {
-        reply = "When building containers, prioritize multi-stage Dockerfiles. Separate dependencies from your final lightweight image (e.g. using alpine) to keep boot times fast and secure.";
-      } else if (userMsg.toLowerCase().includes("react") || userMsg.toLowerCase().includes("next")) {
-        reply = "With Next.js App Router, utilize Server Components for fast initial data loading. Move interactive event handlers and state down to small client leaf components annotated with 'use client'.";
+    try {
+      const response = await fetch("/api/mentor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMsg }),
+      });
+      const data: { reply?: string; error?: string } = await response.json();
+
+      if (!response.ok || !data.reply) {
+        throw new Error(data.error || "The AI Mentor did not return a response.");
       }
 
-      setMessages(prev => [...prev, { sender: "mentor", text: reply }]);
+      setMessages(prev => [...prev, { sender: "mentor", text: data.reply! }]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to reach the AI Mentor.";
+      setMessages(prev => [...prev, { sender: "mentor", text: `Sorry, ${message}` }]);
+    } finally {
       setIsTyping(false);
-    }, 1200);
+    }
   };
 
   return (
@@ -91,9 +99,10 @@ export default function AIMentorPage() {
               />
               <button
                 type="submit"
+                disabled={isTyping}
                 className="btn-primary hover:btn-primary-hover text-white text-xs font-bold px-4 rounded-xl transition-all cursor-pointer"
               >
-                Send Query
+                {isTyping ? "Thinking..." : "Send Query"}
               </button>
             </form>
 
