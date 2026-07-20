@@ -168,10 +168,10 @@ export default function DashboardPage() {
                 onClick={() => fetchStats(true)}
                 disabled={refreshing}
                 title="Refresh dashboard"
-                className="h-8 w-8 flex items-center justify-center rounded-xl btn-secondary hover:btn-secondary-hover transition-all cursor-pointer disabled:opacity-50"
+                className="h-8 w-8 flex items-center justify-center rounded-xl bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.07] hover:border-white/[0.12] transition-all cursor-pointer disabled:opacity-50 text-slate-400 hover:text-white"
               >
                 <RefreshCw
-                  className={`h-3.5 w-3.5 text-slate-400 ${refreshing ? "animate-spin" : ""}`}
+                  className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
                 />
               </button>
               <Link
@@ -457,7 +457,10 @@ export default function DashboardPage() {
                           }}
                           itemStyle={{ color: "#3b82f6" }}
                           labelStyle={{ color: "#94a3b8", fontSize: "10px" }}
-                          formatter={(v: number) => [`${v}h`, "Activity"]}
+                          formatter={(value) => [
+                            `${value ?? 0}h`,
+                            "Activity",
+                          ]}
                         />
                         <Bar
                           dataKey="hours"

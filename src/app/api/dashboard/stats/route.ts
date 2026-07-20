@@ -106,9 +106,13 @@ export async function GET() {
     const QUERY_LIMIT = 50;
     const RESET_DAYS = 7;
 
-    let statDoc = await userStatsCollection.findOne({ userId });
+    const existingStatDoc = await userStatsCollection.findOne({ userId });
+    let statDoc: {
+      mentorQueriesRemaining?: number;
+      lastReset: Date;
+    };
 
-    if (!statDoc) {
+    if (!existingStatDoc) {
       // Seed on first access
       const now = new Date();
       await userStatsCollection.insertOne({
@@ -119,6 +123,10 @@ export async function GET() {
       });
       statDoc = { mentorQueriesRemaining: QUERY_LIMIT, lastReset: new Date() };
     } else {
+      statDoc = {
+        mentorQueriesRemaining: existingStatDoc.mentorQueriesRemaining,
+        lastReset: new Date(existingStatDoc.lastReset),
+      };
       // Auto-reset every RESET_DAYS days
       const lastReset = new Date(statDoc.lastReset);
       const daysSinceReset =
